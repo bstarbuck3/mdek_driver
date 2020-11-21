@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+# Bryan Starbuck - Georgia Institute of Technology - bstarbuck3@gatech.edu
+
 import rospy
 import serial, time, os
 from serial import SerialException
@@ -19,25 +21,27 @@ class Ranges:
 		self.Z =  np.mat([[15.0], [15.0], [15.0], [15.0], [15.0], [15.0], [15.0], [15.0], [15.0]])
 
 	def run(self):
-		# connect to robot serial port tag
-		print("serial")
+		# connect to tag via serial port
 		try:
 			self.ser.close()
 			self.ser.open()
 			time.sleep(1)
-			# configure as tag and publish ranges			
+			# configure mdek as a tag			
 			self.ser.write("nmt\r")
 			time.sleep(1)
 			self.ser.write("\r")
 			self.ser.write("\r")
 			time.sleep(1)
+			# print ranges through serial port
 			self.ser.write("les\r")
 			time.sleep(1)
 			msg = UWB()
-			# collect data and publish				
+			print("serial connection established")
+			# read and publish data				
 			while not rospy.is_shutdown():
 				raw_data = self.ser.readline()
 				data = raw_data.split()
+				# len(data) is the number of tag to anchor ranges
 				for i in range(0,len(data)):					
 					if data[i][0:4] =='821D':
 						self.Z[0] = data[i][21:]
@@ -48,6 +52,7 @@ class Ranges:
 					if data[i][0:4] =='053B':
 						self.Z[3] = data[i][21:]
 				print(self.Z.T)
+				# publish ros message
 				msg.rt1 = self.Z[0]
 				msg.rt2 = self.Z[1]
 				msg.rt3 = self.Z[2]
