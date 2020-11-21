@@ -1,0 +1,10 @@
+Header header
+float64 rt1
+float64 rt2
+float64 rt3
+float64 rt4
+float64 ra12
+float64 ra13
+float64 ra23
+float64 ra24
+float64 ra34
