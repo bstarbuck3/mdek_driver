@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+# Bryan Starbuck - Georgia Institute of Technology - bstarbuck3@gatech.edu
+
 import rospy
 import serial, time, os
 from serial import SerialException
